@@ -4,6 +4,10 @@ $home = false;
 $error=false;
 if (isset($_POST['codigo'])) {
 
+    // archivo de texto
+    $myfile = fopen("registro.txt", "w") or die("Unable to open file!");
+    
+    
     require_once 'google/google-spreadsheet-to-array.php';
     $key = "1M3WafwxMNnvgCT0JIRFhzH_ujmPoSJclCLabDmbTo2U";
     $arreglo = google_spreadsheet_to_array($key);
@@ -20,7 +24,6 @@ if (isset($_POST['codigo'])) {
         $f = ""; // CODIGO RSVP
         $g = ""; // RESERVADOS ADULTOS
         $h = ""; // RESERVADOS NIÑOS
-        $i = ""; // EMAIL
 
         if (isset($v['A'])) {
             $a = $v['A'];
@@ -43,9 +46,6 @@ if (isset($_POST['codigo'])) {
         if (isset($v['H'])) {
             $h = $v['H'];
         }
-        if (isset($v['I'])) {
-            $i = $v['I'];
-        }
 
 
         if ($_POST['codigo'] == $f) {
@@ -55,7 +55,6 @@ if (isset($_POST['codigo'])) {
             $adultos=$b;
             $ninos=$c;
             $total=$d;
-            $correo=$i;
         } else { //codigo erroneo
             $error=true;
         }
@@ -236,7 +235,7 @@ if (isset($_POST['codigo'])) {
                     <div class="col-md-5">
                         <div class="rsvp-wrapper">
                                                     
-                            
+                            <form method="post" action="update.php">
                             <div class="form-group">
                                 <label for="nombre">NOMBRE EN INVITACION</label>
                                 <input type="text" class="form-control ajax-input" id="nombre" value="<?php if(isset($nombre)){echo $nombre;} ?>" disabled>
@@ -292,6 +291,7 @@ if (isset($_POST['codigo'])) {
                             <div class="form-group" id="boton-enviar" style="display:none;">
                                 <input type="submit"  name="enviar" class="button medium reverse" value="ENVIAR MI RSVP">
                             </div> 
+                            </form>
                         </div>
                     </div>
                 </div><!--END of TEXT SECTION-->
