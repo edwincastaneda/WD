@@ -5,13 +5,13 @@ $error=false;
 if (isset($_POST['codigo'])) {
 
     // archivo de texto
-    $myfile = fopen("registro.txt", "w") or die("Unable to open file!");
-    
     
     require_once 'google/google-spreadsheet-to-array.php';
     $key = "1M3WafwxMNnvgCT0JIRFhzH_ujmPoSJclCLabDmbTo2U";
     $arreglo = google_spreadsheet_to_array($key);
 
+    
+    
     $rsvp_flag=true;
     $count = -1;
     
@@ -48,6 +48,7 @@ if (isset($_POST['codigo'])) {
         }
 
 
+        
         if ($_POST['codigo'] == $f) {
             $rsvp_flag = false;
             $nombre=$a;
@@ -55,9 +56,24 @@ if (isset($_POST['codigo'])) {
             $adultos=$b;
             $ninos=$c;
             $total=$d;
+
+            
+            // GENERO EL ARCHIVO DE TEXTO
+           // $saveFile = fopen("registros/".$f.".txt", "w") or die("Unable to open file!");
+           // fwrite($saveFile, var_export(array("total_adultos"=>$g,"total_ninos"=>$h), true));
+            
+            
         } else { //codigo erroneo
             $error=true;
         }
+        
+        $openFile= array();
+        $openFile = fopen("registros/".$_POST['codigo'].".txt", "w") or die("Unable to open file!");
+        
+        if($_POST['codigo']==$openFile['codigo_rsvp']){
+            echo "clavo";
+        }
+        // SI YA EXISTE
     }
     
     
