@@ -1,20 +1,41 @@
 <?php include "header.php"; ?>
 <?php
 $home = false;
-$error=false;
+$error = false;
+$no_show_form=false;
+if (isset($_POST['enviar_rsvp'])) {
+    // GENERO EL ARCHIVO DE TEXTO
+    $saveFile = fopen("registros/" . $_POST['codigo_rsvp'] . ".txt", "w") or die("Unable to open file!");
+
+    if($_POST['asistira']=='no'){
+        $adultos=0;
+    }else{
+        $adultos=$_POST['adultos'];
+    }
+    
+    if (isset($_POST['ninos'])) {
+        fwrite($saveFile, json_encode(array("codigo_rsvp" => $_POST['codigo_rsvp'], "total_adultos" =>$adultos, "total_ninos" => $_POST['ninos']), true));
+    } else {
+       fwrite($saveFile, json_encode(array("codigo_rsvp" => $_POST['codigo_rsvp'], "total_adultos" =>$adultos, "total_ninos" => 0), true));
+    }
+    $no_show_form=true;
+    $rsvp=false;
+}else{
+
+
 if (isset($_POST['codigo'])) {
 
     // archivo de texto
-    
+
     require_once 'google/google-spreadsheet-to-array.php';
     $key = "1M3WafwxMNnvgCT0JIRFhzH_ujmPoSJclCLabDmbTo2U";
     $arreglo = google_spreadsheet_to_array($key);
+    $reservacion_efectuada = false;
 
-    
-    
-    $rsvp_flag=true;
+
+    $rsvp_flag = true;
     $count = -1;
-    
+
     foreach ($arreglo as $k => $v) {
         $count++;
         $a = ""; // FAMILIA
@@ -48,39 +69,33 @@ if (isset($_POST['codigo'])) {
         }
 
 
-        
+
         if ($_POST['codigo'] == $f) {
             $rsvp_flag = false;
-            $nombre=$a;
-            $codigo_rsvp=$f;
-            $adultos=$b;
-            $ninos=$c;
-            $total=$d;
+            $nombre = $a;
+            $codigo_rsvp = $f;
+            $adultos = $b;
+            $ninos = $c;
+            $total = $d;
 
-            
-            // GENERO EL ARCHIVO DE TEXTO
-           // $saveFile = fopen("registros/".$f.".txt", "w") or die("Unable to open file!");
-           // fwrite($saveFile, var_export(array("total_adultos"=>$g,"total_ninos"=>$h), true));
-            
-            
+
+            if (file_exists("registros/" . $_POST['codigo'] . ".txt")) {
+                $openFile = json_decode(file_get_contents("registros/" . $_POST['codigo'] . ".txt", true));
+                if ($_POST['codigo'] == $openFile->{'codigo_rsvp'}) {
+                    $reservacion_efectuada = true;
+                }
+            }
         } else { //codigo erroneo
-            $error=true;
+            $error = true;
         }
-        
-        $openFile= array();
-        $openFile = fopen("registros/".$_POST['codigo'].".txt", "w") or die("Unable to open file!");
-        
-        if($_POST['codigo']==$openFile['codigo_rsvp']){
-            echo "clavo";
-        }
-        // SI YA EXISTE
     }
-    
-    
+
+
     $rsvp = $rsvp_flag;
-    
 } else {
     $rsvp = true;
+}
+
 }
 ?>
 <!-- Modal -->
@@ -89,31 +104,31 @@ if (isset($_POST['codigo'])) {
         <div class="modal-content">
             <form method="post" action="rsvp.php">
                 <div class="modal-body"> 
-                    <?php if($error){ ?>
-                    <div class="alert alert-warning" role="alert">
-                        <strong>Advertencia: </strong>El codigo de invitación que validaste no existe!<br/>
-                        Puedes consultar tu invitación para obtener el código correcto.
-                    </div>
-                    <?php }else{ ?>
-                    <h3>Hola!</h3>
-                    Ingresa el codigo que esta en tu invitación para cargar la información de tu invitacion en el formulario de envio de rsvp.
-                    <br/>
-                    <br/>
-                    <?php } ?>
-                   
-                   <div class="form-group">
-                       <center>
-                        <label for="codigo">CODIGO DE INVITACION</label>
-                        <input type="text" maxlength="4" class="form-control ajax-input" style="text-transform: uppercase; width: 100px; text-align: center; font-size: 20px;" name="codigo" required="true" placeholder="****">
-                       </center>
+                    <?php if ($error) { ?>
+                        <div class="alert alert-warning" role="alert">
+                            <strong>Advertencia: </strong>El codigo de invitación que validaste no existe!<br/>
+                            Puedes consultar tu invitación para obtener el código correcto.
                         </div>
-                    
+                    <?php } else { ?>
+                        <h3>Hola!</h3>
+                        Ingresa el codigo que esta en tu invitación para cargar la información de tu invitacion en el formulario de envio de rsvp.
+                        <br/>
+                        <br/>
+                    <?php } ?>
+
+                    <div class="form-group">
+                        <center>
+                            <label for="codigo">CODIGO DE INVITACION</label>
+                            <input type="text" maxlength="4" class="form-control ajax-input" style="text-transform: uppercase; width: 100px; text-align: center; font-size: 20px;" name="codigo" required="true" placeholder="****">
+                        </center>
+                    </div>
+
                 </div>
 
                 <div class="modal-footer">
-                    <input type="submit"  onclick="window.location='./';"  class="button medium" style="margin-top: 0px;" value="CANCELAR"/>
+                    <input type="submit"  onclick="window.location = './';"  class="button medium" style="margin-top: 0px;" value="CANCELAR"/>
                     <input type="submit" id="submitButton"  name="submitButton" class="button medium reverse" value="VALIDAR CODIGO" style="margin-top: 0px;">
-                   
+
                 </div>
             </form>
         </div>
@@ -241,73 +256,108 @@ if (isset($_POST['codigo'])) {
                 </div>
                 <div class="row">
                     <div class="col-md-offset-1 col-md-5">
-                        <h3 style="margin-top:3px;">Gracias por confirmar tu participación antes del 9 de Abril</h3>  
+                        <h3 style="margin-top:3px;">Gracias por confirmar tu participación antes del 11 de Abril</h3>  
                         <p><strong>Instrucciones:</strong>
                         <p>Confirma si podrás asistir al evento</p>
                         <p>Selecciona la cantidad de invitados a confirmar, de acuerdo a la cantidad de personas numeradas en tu tarjeta.</p>
                         <p>Envia tu rsvp</p>
                     </div>
-                    
+
                     <div class="col-md-5">
                         <div class="rsvp-wrapper">
-                                                    
-                            <form method="post" action="update.php">
-                            <div class="form-group">
-                                <label for="nombre">NOMBRE EN INVITACION</label>
-                                <input type="text" class="form-control ajax-input" id="nombre" value="<?php if(isset($nombre)){echo $nombre;} ?>" disabled>
+                            <?php if($no_show_form){?>
+                            <div class="alert alert-success" role="alert">
+                                <b>RSVP</b> registrada con exito!<br>
+                                Para registrar una nueva <b>RSVP</b> haz clic <a href="rsvp.php">aqui</a>.
                             </div>
                             
+                            <?php } else {?>
+                            <?php if ($reservacion_efectuada) { ?>
+                                <div class="alert alert-warning" role="alert">
+                                    Ya has enviado una <b>RSVP</b> anteriormente con los siguientes datos:
+                                </div>   
+                            <ul>
+                                <li>
+                                    <?php if(isset($openFile->{'total_adultos'})){echo $openFile->{'total_adultos'};}?> Adultos
+                                </li>
+                                <li><?php if(isset($openFile->{'total_ninos'})){echo $openFile->{'total_ninos'};}?> Niños
+                                </li>
+                            </ul>
+                                    
+                                    
+                            <em style="color:#f0394d;">Si lo deseas puedes volver a enviar tu <b>RSVP</b>.</em><br><br>
+                                   
+                                
+                            <?php } ?>
+                            <div class="form-group">
+                                <label for="nombre">NOMBRE EN INVITACION</label>
+                                <input type="text" class="form-control ajax-input" id="familia" value="<?php
+                                if (isset($nombre)) {
+                                    echo $nombre;
+                                }
+                                ?>" readonly="true">
+                            </div>
+
                             <div class="form-group">
                                 <label for="codigo_rsvp">CODIGO RSVP</label>
-                                <input type="text" class="form-control ajax-input" id="codigo_rsvp" value="<?php if(isset($codigo_rsvp)){echo $codigo_rsvp;} ?>" disabled>
+                                <input type="text" class="form-control ajax-input" name="codigo_rsvp" value="<?php
+                                if (isset($codigo_rsvp)) {
+                                    echo $codigo_rsvp;
+                                }
+                                ?>" readonly="true">
                             </div>   
-                            
+
                             <div class="form-group">
                                 <label>ASISTIRA AL EVENTO?</label>
                                 <div class="ajax-input ajax-radio">
                                     <div data-toggle="buttons">
                                         <label class="btn btn-primary no-icon" id="events-radio-si">
-                                            <input type="radio" value="true"/> Si, ahi estare!
+                                            <input type="radio" name="asistira" value="si"/> Si, ahi estare!
                                         </label>
                                         <label class="btn btn-primary no-icon" id="events-radio-no">
-                                            <input type="radio" value="false"/> No podre<?php if($total>1){ echo "mos";} ?> asistir
+                                            <input type="radio" name="asistira" value="no"/> No podre<?php
+                                if ($total > 1) {
+                                    echo "mos";
+                                }
+                                ?> asistir
                                         </label>
                                     </div>
                                 </div> 
                             </div> 
-                            
+
                             <div id="numero-personas" style="display:none;">
-                            <div class="form-group cantidad_personas">
-                                <label>NUMERO DE ADULTOS</label>
-                                <div id="guest-radio" class="ajax-input ajax-radio">
-                                    <div data-toggle="buttons">
-                                        <?php for($i=1; $i<=$adultos; $i++){?>
-                                        <label class="btn btn-primary no-icon">
-                                            <input type="radio" name="adultos" id="<?php echo $i;?>" value="<?php echo $i;?>"> <?php echo $i;?>
-                                        </label>
-                                        <?php }?>
+                                <div class="form-group cantidad_personas">
+                                    <label>NUMERO DE ADULTOS</label>
+                                    <div id="guest-radio" class="ajax-input ajax-radio">
+                                        <div data-toggle="buttons">
+<?php for ($i = 1; $i <= $adultos; $i++) { ?>
+                                                <label class="btn btn-primary no-icon">
+                                                    <input type="radio" name="adultos" id="<?php echo $i; ?>" value="<?php echo $i; ?>"> <?php echo $i; ?>
+                                                </label>
+<?php } ?>
+                                        </div>
+                                    </div> 
+                                </div>
+<?php if ($ninos > 0) { ?>
+                                    <div class="form-group cantidad_personas">
+                                        <label>NUMERO DE NIÑOS</label>
+                                        <div id="guest-radio" class="ajax-input ajax-radio">
+                                            <div data-toggle="buttons">
+    <?php for ($i = 1; $i <= $ninos; $i++) { ?>
+                                                    <label class="btn btn-primary no-icon">
+                                                        <input type="radio" name="ninos" id="<?php echo $i; ?>" value="<?php echo $i; ?>"> <?php echo $i; ?>
+                                                    </label>
+    <?php } ?>
+                                            </div>
+                                        </div> 
                                     </div>
-                                </div> 
-                            </div>
-                            <?php if($ninos>0){ ?>
-                            <div class="form-group cantidad_personas">
-                                <label>NUMERO DE NIÑOS</label>
-                                <div id="guest-radio" class="ajax-input ajax-radio">
-                                    <div data-toggle="buttons">
-                                        <?php for($i=1; $i<=$ninos; $i++){?>
-                                        <label class="btn btn-primary no-icon">
-                                            <input type="radio" name="adultos" id="<?php echo $i;?>" value="<?php echo $i;?>"> <?php echo $i;?>
-                                        </label>
-                                        <?php }?>
-                                    </div>
-                                </div> 
-                            </div>
-                            <?php } ?>
+<?php } ?>
                             </div>
                             <div class="form-group" id="boton-enviar" style="display:none;">
-                                <input type="submit"  name="enviar" class="button medium reverse" value="ENVIAR MI RSVP">
-                            </div> 
-                            </form>
+                                <input type="submit"  name="enviar_rsvp" class="button medium reverse" value="ENVIAR MI RSVP">
+                            </div>
+                            
+                            <?php } ?>
                         </div>
                     </div>
                 </div><!--END of TEXT SECTION-->
