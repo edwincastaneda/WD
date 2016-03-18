@@ -161,8 +161,8 @@ if (isset($_POST['codigo'])) {
 
             <!-- MENU ICON -->
             <div id="menu-icon" class="white">
-                <a href="#" class="sb-toggle-right">
-                    <i class="de-icon-menu"></i>
+                <a href="#" class="sb-toggle-right" style="COLOR: #EF384C;FONT-WEIGHT: BOLD;FONT-SIZE: 30PX;">
+                    MENU
                 </a>
             </div>
 
@@ -225,7 +225,7 @@ if (isset($_POST['codigo'])) {
         <!-- MAIN SLIDER IMAGES -->            
         <div class="slides">
             <!-- SLIDE IMAGE -->
-            <div data-stellar-ratio="0.5" class="slide-image" style="background-image:url('wedding_files/slides/4.jpg'); background-position:top;">
+            <div data-stellar-ratio="0.5" class="slide-image" style="background-image:url('wedding_files/slides/8.jpg'); background-position:top;">
             </div>
 
             <div class="slide-overlay" style="opacity:0.2"> </div> 

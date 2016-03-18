@@ -1,11 +1,11 @@
 <?php include "header.php"; ?>
 <?php
-$home=true; 
-$rsvp=false;
-    require_once 'google/google-spreadsheet-to-array.php';
-    $key = "1M3WafwxMNnvgCT0JIRFhzH_ujmPoSJclCLabDmbTo2U";
-    $arreglo = google_spreadsheet_to_array($key);
-  
+$home = true;
+$rsvp = false;
+require_once 'google/google-spreadsheet-to-array.php';
+$key = "1FZOqOfE7IplYtRSILNJaTl6sxEoiK44A1lQO6GFVDlY";
+$arreglo = google_spreadsheet_to_array($key);
+$count = -1;
 ?>
 
 
@@ -34,8 +34,8 @@ $rsvp=false;
 
             <!-- MENU ICON -->
             <div id="menu-icon" class="white">
-                <a href="#" class="sb-toggle-right">
-                    <i class="de-icon-menu"></i>
+                <a href="#" class="sb-toggle-right" style="COLOR: #EF384C;FONT-WEIGHT: BOLD;FONT-SIZE: 30PX;">
+                    MENU
                 </a>
             </div>
 
@@ -78,9 +78,9 @@ $rsvp=false;
                                         <i class="de-icon-heart white-heart"></i>
                                         <span class="white-line"></span>
                                     </div>
-                                    <h2>¡Bienvenido a la confirmación de participación de nuestra boda!</h2>
+                                    <h2>Programa general de nuestra boda</h2>
                                     <p>
-                                        Gracias por tomarte el tiempo de confirmar tu participación, para nosotros es muy valiosa tu presencia y participación abajo encontrarás las instrucciones correspondientes.
+                                        texto del programa
                                     </p>
                                 </div>
 
@@ -98,7 +98,7 @@ $rsvp=false;
         <!-- MAIN SLIDER IMAGES -->            
         <div class="slides">
             <!-- SLIDE IMAGE -->
-            <div data-stellar-ratio="0.5" class="slide-image" style="background-image:url('wedding_files/slides/4.jpg'); background-position:top;">
+            <div data-stellar-ratio="0.5" class="slide-image" style="background-image:url('wedding_files/slides/7.jpg'); background-position:top;">
             </div>
 
             <div class="slide-overlay" style="opacity:0.2"> </div> 
@@ -114,7 +114,7 @@ $rsvp=false;
         <!-- ICON -->
         <div class="icon-title">
             <div class="de-icon circle light large-size aligncenter">
-                <i class="de-icon-mail-2"></i>
+                <i class="de-icon-doc"></i>
             </div>
         </div>
 
@@ -128,16 +128,37 @@ $rsvp=false;
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-offset-1 col-md-5">
-                        <h3 style="margin-top:3px;">Gracias por confirmar tu participación antes del 11 de Abril</h3>  
-                        <p><strong>Instrucciones:</strong>
-                        <p>Confirma si podrás asistir al evento</p>
-                        <p>Selecciona la cantidad de invitados a confirmar, de acuerdo a la cantidad de personas numeradas en tu tarjeta.</p>
-                        <p>Envia tu rsvp</p>
-                    </div>
+                    <div class="col-md-offset-1 col-md-12">
+                        <h2 style="margin-top:3px;">BODA EDWIN Y DEBORAH</h2>  
+                        <?php
+                        foreach ($arreglo as $k => $v) {
 
-                    <div class="col-md-5">
-                       
+                            $count++;
+
+                            if ($count > 0) {
+                                if (isset($v['A'])) {
+                                    ?>
+
+                                    <h3 style="margin-left:2em"><?php echo $v['A']; ?></h3>
+
+                                <?php }
+                                if (isset($v['B'])) {
+                                    ?>
+
+                                    <h4 style="margin-left:5em"><?php echo $v['B']; ?></h4>
+
+                                <?php
+                                }
+                                if (isset($v['C'])) {
+                                    ?>
+
+                                    <h5 style="margin-left:7em"><?php echo $v['C']; ?></h5>
+
+                                <?php
+                                }
+                            }
+                        }
+                        ?>
                     </div>
                 </div><!--END of TEXT SECTION-->
 

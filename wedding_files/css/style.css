@@ -282,7 +282,7 @@ a{
 	color:#6a6a6a;
 }
 
-a:hover{
+a:hover, a:link{
 	text-decoration:none;
 }
 

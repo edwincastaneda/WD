@@ -85,7 +85,7 @@
             <div id="side-navbar-header">
 
                 <div id="close-inner-wrapper">
-                    <a href="http://demo.dethemes.com/forever/versions/side-bar/index.html#" id="close-button"><i class="de-icon-cancel-2"></i></a>
+                    <a href="#" id="close-button"><i class="de-icon-cancel-2"></i></a>
                 </div>
 
             </div>
