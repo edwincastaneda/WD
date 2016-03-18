@@ -108,7 +108,7 @@
                 <li><a href="./">INICIO</a></li>
                 <li><a href="rsvp.php">RSVP</a></li>
                 <li><a href="#">DIRECTRICES</a></li>
-                <li><a href="#">PROGRAMA</a></li>
+                <li><a href="programa.php">PROGRAMA</a></li>
             </ul>
 
         </nav> <!-- END of SIDE NAVBAR -->

@@ -111,7 +111,7 @@ if (isset($_POST['codigo'])) {
                         </div>
                     <?php } else { ?>
                         <h3>Hola!</h3>
-                        Ingresa el codigo que esta en tu invitación para cargar la información de tu invitacion en el formulario de envio de rsvp.
+                        Ingresa el codigo que esta en tu invitación para cargar la información de tu invitacion en el formulario de envio de <b>RSVP</b>.
                         <br/>
                         <br/>
                     <?php } ?>
